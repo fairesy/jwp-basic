@@ -10,19 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import core.db.DataBase;
+import next.model.User;
 
-@WebServlet("/user/list")
-public class ListUserServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
+@WebServlet("/user/profile")
+public class ProfileServlet extends HttpServlet{
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
 		HttpSession session = req.getSession(); 
 		Object value = session.getAttribute("user"); 
-		if(value != null){
-			req.setAttribute("users", DataBase.findAll());
-			RequestDispatcher rd = req.getRequestDispatcher("/user/list.jsp");
+		
+		if (value != null) {
+			User user = (User)value; 
+			req.setAttribute("user", user);
+			RequestDispatcher rd = req.getRequestDispatcher("/user/profile.jsp");
 			rd.forward(req, resp);
 		}else{
 			resp.sendRedirect("/index.jsp");

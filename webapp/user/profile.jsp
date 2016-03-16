@@ -1,7 +1,8 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="kr">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -19,7 +20,7 @@
     <div class="col-md-12">
         <div class="navbar-header">
 
-            <a href="../index.html" class="navbar-brand">SLiPP</a>
+            <a href="../index.jsp" class="navbar-brand">SLiPP</a>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse1">
                 <i class="glyphicon glyphicon-search"></i>
             </button>
@@ -42,7 +43,16 @@
                         <li><a href="https://facebook.com" target="_blank">Facebook</a></li>
                     </ul>
                 </li>
-                <li><a href="../user/list.jsp"><i class="glyphicon glyphicon-user"></i></a></li>
+                <li>
+				<c:choose>
+					<c:when test="${not empty sessionScope.user}">
+			             <a href="./user/list.jsp">					
+					</c:when> 
+					<c:otherwise>
+						<a href="./index.jsp">
+					</c:otherwise>
+				</c:choose>
+                <i class="glyphicon glyphicon-user"></i></a></li>
             </ul>
         </div>
     </div>
@@ -52,14 +62,14 @@
         <div class="navbar-header">
             <a href="#" style="margin-left:15px;" class="navbar-btn btn btn-default btn-plus dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-home" style="color:#dd1111;"></i> Home <small><i class="glyphicon glyphicon-chevron-down"></i></small></a>
             <ul class="nav dropdown-menu">
-                <li><a href="../user/profile.html"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a></li>
+                <li><a href="../user/profile.jsp"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a></li>
                 <li class="nav-divider"></li>
                 <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
             </ul>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse2">
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="../index.html">Posts</a></li>
+                <li class="active"><a href="../index.jsp">Posts</a></li>>
                 <c:choose>
 					<c:when test="${not empty sessionScope.user}">
 		                <li><a href="/user/logout" role="button">로그아웃</a></li>
@@ -67,7 +77,7 @@
 					</c:when> 
 					<c:otherwise>
 		                <li><a href="user/login.html" role="button">로그인</a></li>
-		                <li><a href="user/form.html" role="button">회원가입</a></li>
+		                <li><a href="user/form.jsp" role="button">회원가입</a></li>
 					</c:otherwise>
 				</c:choose>
             </ul>
@@ -76,27 +86,24 @@
 </div>
 
 <div class="container" id="main">
-    <div class="col-md-10 col-md-offset-1">
+    <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>#</th> <th>사용자 아이디</th> <th>이름</th> <th>이메일</th><th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${users}" var="user" varStatus="status">
-                    <tr>
-                        <th scope="row">${status.count}</th>
-                        <td>${user.userId}</td>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                        <td><a href="/update?userId=${user.userId}" class="btn btn-success" role="button">수정</a>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
+            <div class="panel-heading"><h4>Profiles</h4></div>
+            <div class="panel-body">
+                <div class="well well-sm">
+                    <div class="media">
+                        <a class="thumbnail pull-left" href="#">
+                            <img class="media-object" src="../images/80-text.png">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">${user.name}</h4>
+                            <p>
+                                <a href="#" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-envelope"></span>&nbsp;${user.email}</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -105,5 +112,5 @@
 <script src="../js/jquery-2.2.0.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/scripts.js"></script>
-</body>
+	</body>
 </html>
