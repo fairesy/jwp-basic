@@ -22,7 +22,6 @@ public class QuestionDao {
 						rs.getTimestamp("createdDate"),
 						rs.getInt("countOfAnswer"));
 			}
-			
 		};
 		
 		return jdbcTemplate.query(sql, rm);
