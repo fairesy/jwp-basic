@@ -13,20 +13,21 @@
 <div class="container" id="main">
    <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
       <div class="panel panel-default content-main">
-          <form name="question" method="post" action="/qna/create">
+          <form name="question-modify" method="post" action="/api/qna/updateQuestion">
               <div class="form-group">
                   <label for="writer">글쓴이</label>
-                  <input class="form-control" id="writer" name="writer" value=${sessionScope.user.name} }/>
+                  <input type="hidden" name="questionId" value="${question.questionId}"/>
+                  <input type="hidden" class="form-control" id="writer" name="writer" value="${sessionScope.user.name}"/>
               </div>
               <div class="form-group">
                   <label for="title">제목</label>
-                  <input type="text" class="form-control" id="title" name="title" placeholder="제목"/>
+                  <input type="text" class="form-control" id="title" name="title" placeholder="제목" value="${question.title}"/>
               </div>
               <div class="form-group">
                   <label for="contents">내용</label>
-                  <textarea name="contents" id="contents" rows="5" class="form-control"></textarea>
+                  <textarea name="contents" id="contents" rows="5" class="form-control">${question.contents}</textarea>
               </div>
-              <button type="submit" class="btn btn-success clearfix pull-right">질문하기</button>
+              <button type="submit" id="modify-question" class="btn btn-success clearfix pull-right">수정하기</button>
               <div class="clearfix" />
           </form>
         </div>

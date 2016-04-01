@@ -49,7 +49,14 @@
 					</ul>
 				</div>
 				<div class="col-md-3 qna-write">
-					<a href="/qna/form" class="btn btn-primary pull-right" role="button">질문하기</a>
+					<c:choose>
+						<c:when test="${sessionScope.user !=null}">
+						<a href="/qna/form" class="btn btn-primary pull-right" role="button">질문하기</a>
+						</c:when>
+						<c:otherwise>
+						<a href="/users/loginForm" class="btn btn-primary pull-right" role="button">질문하기</a>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 		</div>
