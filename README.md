@@ -89,6 +89,39 @@ public class RequestMapping {
 `mappings` 해쉬맵에 URL과 Controller를 쌍으로 맺어서 저장하고 있다.     
 즉, `/`로 접속하면 `HomeController`가 알아서 처리하도록 부탁하는 것이다. 
 
-### localhost:8080으로 접속했을 때 서버에서 일어나는 일 
+### localhost:8080/으로 접속했을 때 서버에서 일어나는 일 
+`localhost:8080/`으로 접속하면, 일단 `DispatcherServlet`의 `service()`로 들어온다. 
 
+```java
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String requestUri = req.getRequestURI(); 
+		logger.debug("Method : {}, Request URI : {}", req.getMethod(), requestUri);
 
+		Controller controller = rm.findController(req.getRequestURI()); 
+		ModelAndView mav;
+		try {
+			mav = controller.execute(req, resp);
+			View view = mav.getView();
+			view.render(mav.getModel(), req, resp);
+		} catch (Throwable e) {
+			logger.error("Exception : {}", e);
+			throw new ServletException(e.getMessage());
+		}
+	}
+```
+
+rm(request mapping)인스턴스의 `findController`를 통해 지금 요청이 들어온 URI는 어떤 컨트롤러에서 처리하기로 했었는지 찾는다. 그리고 해당하는 컨트롤러의 `excute`를 실행한다.     
+    
+`/`에 맵핑되어있는 `HomeController`의 경우 다음과 같다. 
+```java
+public class HomeController extends AbstractController {
+    private QuestionDao questionDao = new QuestionDao();
+
+    @Override
+    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return jspView("index.jsp").addObject("questions", questionDao.findAll());
+    }
+}
+```
+질문과 관련한 데이터베이스 접근 작업을 중개해주는 QuestionDao의 findAll()을 사용하여 전체 질문 리스트를 가지고 와서, index.jsp에서 `questions`이라는 이름으로 꺼내서 쓸 수 있도록 넣어준다. 필요한 데이터를 갖춘 jspView는 DispatcherServlet의 service메소드로 리턴되어 render되고, 사용자에게 보여진다. 
